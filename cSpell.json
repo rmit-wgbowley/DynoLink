@@ -1,20 +1,19 @@
 {
   "version": "0.2",
   "language": "en-US",
-  "ignorePaths": [
-    "**/*.{asc,lib,asy}"
-  ],
+  "ignorePaths": ["**/*.{asc,lib,asy}"],
   "words": [
+    "Altium",
     "Bowley",
-    "schmitt",
-    "picounits",
-    "zener",
     "datasheets",
-    "pmsm",
+    "IGES",
     "milli",
     "nullset",
-    "Altium",
     "PCLK",
-    "IGES"
+    "picounits",
+    "pmsm",
+    "pylintrc",
+    "schmitt",
+    "zener"
   ]
 }

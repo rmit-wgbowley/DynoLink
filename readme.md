@@ -1,21 +1,65 @@
+<!--
+Colors:
+FFFFFF - Pure white
+e01e37 - Bold crimson-red 
+-->
+
 <p align="center">
   <img src="media/load_and_dyno_motor.png" alt="load_and_dyno_motors" style="max-width:600px;">
 </p>
-
 
 ## Overview
 ![MIT License](https://img.shields.io/badge/License-MIT-FFFFFF?style=flat-square&logoColor=black)
 ![Electrics](https://img.shields.io/badge/Domain-Electrics-e01e37?style=flat-square&logoColor=black)
 ![Dyno System](https://img.shields.io/badge/System-Dyno-FFFFFF?style=flat-square&logo=speedtest)
 
-The RMIT dyno setup consists of two systems, the dyno controller panel (DCS800) and r19e/r26 ECU. This allows for the car's powertrain system to be validated before implementation into the car. The ECU controls the load motor and HV system. However, for this test setup it is also meant to transmit a `0-3.3 V @ 10 kHz` PWM signal to control the dyno motor RPM. This allows for a lookup table to be used to ramp up the dyno motor (former elevator motor) RPM in an arbitrary function.
+The RMIT dyno setup consists of two systems: the dyno controller panel (DCS800) and the r19e ECU. This allows the vehicle's powertrain system to be validated before implementation. The ECU controls the load motor and HV system. However, for this test setup, it is also meant to transmit a `0-3.3 V` PWM signal to control the dyno motor RPM. This allows a lookup table to be used to ramp up the dyno motor (a former elevator motor) RPM in an arbitrary function.
 
-> [!NOTE]
-> ECU-side board can be found [here](ecu-side) & dyno-side board can be found [here](dyno-side).
+> [!important]
+> Design Goals:
+> - Safely interface a 3.3 V STM32 PWM output with a 0–10 V dyno controller input.
+> - Provide galvanic isolation between the ECU and dyno controller.
+> - Maintain signal integrity over 2–4 m cable runs.
 
-## Why communicate? 
+## Repository Structure
 
-The 2026 dyno setup uses speed control on the dyno-side and torque control on the load motor. This allows for a lookup table to be used to ramp up the dyno RPM to model RPM vs torque. For example, the dyno-side RPM over time could be modelled as this arbitrary function:
+
+```
+/
+├── README.md
+├── LICENSE
+├── .gitignore
+├── .pylintrc
+├── cSpell.json
+│
+├── domain-side/                      # Design calculations, profiles and documentation
+│   ├── datasheets/                   # Component datasheets
+│   ├── detailed_design/              # Analysis scripts in picounits
+│   ├── pcb_case/                     # CAD files (.step & .f3z)
+│   └── readme.md                     # Output dynamics based on frequency changes
+│
+├── dyno-side/                        # Receiver and 0–10 V output PCB
+│   ├── 3d_model/                     # CAD files (.step & .iges)
+│   ├── detailed_design/              # Analysis scripts in picounits
+│   ├── datasheets/                   # Component datasheets
+│   ├── schematic.pdf                 # PDF schematic
+│   ├── BOM.xlsx                      # BOM file
+│   └── readme.md                     # Topology & components
+│
+├── ecu-side/                         # ECU conditioning and isolation PCB
+│   ├── 3d_model/                     # CAD files (.step & .iges)
+│   ├── detailed_design/              # Analysis scripts in picounits
+│   ├── datasheets/                   # Component datasheets
+│   ├── schematic.pdf                 # PDF schematic
+│   ├── BOM.xlsx                      # BOM file
+│   └── readme.md                     # Topology & components
+│
+└── media/                            # Images
+```
+
+## Control Strategy
+
+The 2026 dyno setup uses speed control on the dyno side and torque control on the load motor. This allows a lookup table to be used to ramp up the dyno RPM to model RPM vs torque. For example, the dyno-side RPM over time could be modelled as this arbitrary function:
 
 $$ RPM(t) = \frac{A}{2B}(1-\cos(\frac{\pi t}{t_{total}})), \quad RPM(t) \in [0, dyno_{max}] $$
 
@@ -33,7 +77,7 @@ And then it would simply be transformed into a simple lookup table, assuming `C`
 | :--- | :---: | :---: | :---: | :---: | :---: |
 | 0 | 0.00 | 0.00 | 0.0  | 0  | 0 |
 | 1 | 0.25 | 0.26 | 0.03 | 5  | 64 |
-| 2 | 0.50 | 0.98 | 0.10 | 20 | 256 |   
+| 2 | 0.50 | 0.98 | 0.10 | 20 | 256 |
 | 3 | 0.75 | 1.95 | 0.20 | 39 | 500 |
 | 4 | 1.00 | 2.93 | 0.29 | 59 | 755 |
 | 5 | 1.25 | 3.64 | 0.36 | 73 | 935 |
@@ -44,53 +88,53 @@ And then it would simply be transformed into a simple lookup table, assuming `C`
 > [!note]
 > The program used to generate that table can be found [here](domain-side/example_profiles.py)
 
-However, for the real system, race day data is used to model the dynamic torque loading on the load motor. 
+However, for the real system, race day data is used to model the dynamic torque loading on the load motor.
 
 ## High-level Topology
 
-The dyno controller and r19e ECU are approximately `2-4 meters` apart and operate at different voltage levels (`0-3.3V` vs `0-10V`). So an ECU conditioning/isolation board is used, and a dyno receiver/amplification board is used.
-
+The dyno controller and r19e ECU are approximately `2-4 meters` apart and operate at different voltage levels (`0-3.3V` vs `0-10V`). An ECU conditioning and isolation board is used on one end, and a dyno receiver and amplification board on the other. Due to the electrical noise produced by the dyno motors, an `RS-422` differential link was used.
 
 ```
 Interface (2.54mm Pitch Male Header)
-ECU PWM Source (Digital 3.3 V - PB13, tim1_CHN1, STM32F405RGT6)
+ECU PWM Source (Digital 3.3 V - PB13, TIM1_CHN1, STM32F405RGT6)
                     ↓
 
 Interface (JST XH 4-pin 2.5mm)
-ECU Side (3.3 V logic / 5 V domain) (conditioning / isolation)
+ECU Side (3.3 V logic / 5 V domain) (Conditioning / Isolation)
 --------------------------------------------
-Schmitt trigger (Cleans up the signal edge)
+Schmitt Trigger (Edge Conditioning)
     ↓
-Digital Isolator (Isolates the PWM signal) ← (Isolated 5 V domain)
+Digital Isolator (Isolates the PWM Signal) ← (Isolated 5 V Domain)
     ↓
-RS-422 Driver (A/B differential pair)
+RS-422 Driver (A/B Differential Pair)
 -------------------------------------------- 
 Interface Socket (RJ45)
                     ↓
 
 CAT 5/6 Cable
 --------------------------------------------
-twisted pairs: (+signal, -signal)
+Twisted Pairs: (+Signal, -Signal)
 --------------------------------------------
                     ↓
 
 Interface Socket (RJ45)
-DYNO Side (5 / 10 V domain) (receiver / amplification) 
+DYNO Side (5 / 10 V domain) (Receiver / Amplification) 
 --------------------------------------------
-RS-422 receiver (Differential input, rejects noise) ← (5 V LDO)
+RS-422 Receiver (Differential Input, Rejects Noise) ← (5 V LDO)
     ↓
-RC low-pass filter (50 Hz) (PWM to DC voltage conversion)
+RC Low-Pass Filter (50 Hz) (PWM to DC Voltage Conversion)
 NOTE:
 Ripple magnitude depends on PWM frequency,
 filter capacitance, and filter resistance.
     ↓
-Op-amp 2× Gain (non-inverting) (Scales to 0–10V ADC input range) ← 10 V Line
+Op-Amp 2× Gain (Non-Inverting) (Scales to 0–10V ADC Input Range) ← 10 V Line
 --------------------------------------------- 
 Interface (JST XH 4-pin 2.5mm)
                     ↓
-Interface (4-pin barrel jack) (Unknown Specifics)
+Interface (4-pin Barrel Jack) (Unknown Specifics)
 DYNO Controller (Analog 10V Input)
 ```
+
 
 ## Hardware Photo
 
@@ -110,4 +154,4 @@ DYNO Controller (Analog 10V Input)
 
 ## Documentation
 
-All internal documentation can be found within this repo's [issues](https://github.com/rmit-wgbowley/dyno-boards/issues?q=state%3Aclosed).
+Design notes, validation results, design iterations, and implementation decisions are documented in the repository [issues](https://github.com/rmit-wgbowley/dyno-boards/issues?q=state%3Aclosed).
