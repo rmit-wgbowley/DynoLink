@@ -154,4 +154,5 @@ DYNO Controller (Analog 10V Input)
 
 ## Documentation
 
-Design notes, validation results, design iterations, and implementation decisions are documented in the repository [issues](https://github.com/rmit-wgbowley/dyno-boards/issues?q=state%3Aclosed).
+All internal documentation can be found within this repo's [issues](https://github.com/rmit-wgbowley/dyno-boards/issues)
+
