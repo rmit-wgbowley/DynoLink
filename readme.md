@@ -95,7 +95,7 @@ However, for the real system, race day data is used to model the dynamic torque 
 The dyno controller and r19e ECU are approximately `2-4 meters` apart and operate at different voltage levels (`0-3.3V` vs `0-10V`). An ECU conditioning and isolation board is used on one end, and a dyno receiver and amplification board on the other. Due to the electrical noise produced by the dyno motors, an `RS-422` differential link was used.
 
 ```
-Interface (2.54mm Pitch Male Header)
+Interface (2.5mm Pitch Male Header)
 ECU PWM Source (Digital 3.3 V - PB13, TIM1_CHN1, STM32F405RGT6)
                     ↓
 
