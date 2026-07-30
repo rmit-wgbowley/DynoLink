@@ -20,7 +20,7 @@ from picounits import KILO, NANO, VOLTAGE, FREQUENCY, RESISTANCE, CAPACITANCE
 v_supply = 5 * VOLTAGE
 amplification_gain = 2
 
-pwm_frequency = 10000 * FREQUENCY
+pwm_frequency = 10 * KILO * FREQUENCY
 cutoff = 50 * FREQUENCY
 r1 = 2 * KILO * RESISTANCE
 c1 = 100 * NANO * CAPACITANCE

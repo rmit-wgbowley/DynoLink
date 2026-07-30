@@ -33,11 +33,11 @@ Description:
 """
 
 from math import pi
-from picounits import VOLTAGE, TIME, MILLI
+from picounits import VOLTAGE, TIME, FREQUENCY, KILO, MILLI
 
 # Script control
 sampling = 3.3 * MILLI * TIME
-frequency = 10000 * (1/TIME)
+frequency = 10 * KILO * FREQUENCY
 step_size = 100
 ratio = 12.81
 

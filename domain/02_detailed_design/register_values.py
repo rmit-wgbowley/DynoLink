@@ -10,14 +10,14 @@ Description:
 
 from picounits import (
     unit_validator, Q, 
-    VOLTAGE, NULLSET, FREQUENCY, RESISTANCE, CAPACITANCE, KILO, MICRO, MILLI,
+    VOLTAGE, NULLSET, FREQUENCY, RESISTANCE, CAPACITANCE, MEGA, KILO, MICRO, MILLI,
 )
 
 # Script Variables
 v_supply = 10 * VOLTAGE
 v_per_rpm = 5 * MILLI * VOLTAGE
 rpm_control_max = 100
-f_clock = 160000000 * FREQUENCY
+f_clock = 1600 * MEGA * FREQUENCY
 
 # THESE ARE THE DYNO SIDE OUTPUT STEP
 v_step = 1 * MILLI * VOLTAGE
