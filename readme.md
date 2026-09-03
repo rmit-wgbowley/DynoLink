@@ -128,7 +128,7 @@ DYNO Controller (Analog 10V Input)
 
 ---
 
-### Hardware Photo
+### Case Design
 
 <p align="center">
   <img src="media/dyno_side_case.png" alt="Dyno-side case render" style="max-width:600px;">
@@ -153,7 +153,7 @@ Case design files: [Available here (Fusion source files)](domain/03_cad/)
 Design notes, validation results, design iterations, and implementation 
 decisions are documented in the repository [issues](https://github.com/rmit-wgbowley/dyno-boards/issues).
 
-### Tags
+#### Tags
 
 ```
 Project Progress:
