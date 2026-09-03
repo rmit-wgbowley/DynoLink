@@ -19,3 +19,4 @@ Interface (RJ45)
 DYNO Side (5/10 V domain) (receiver / amplification) 
 ```
 
+---

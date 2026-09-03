@@ -1,20 +1,25 @@
-# Output Dynamics Based on Frequency Changes (FOR STM32F405RGT6)
+### Output Dynamics Based on Frequency Changes (FOR STM32F405RGT6)
 
-> [!important]
-> Assumed Configuration:
+---
+
+### Assumed Configuration:
 > - PSC = 0
 > - RC Characteristics: 2 kΩ, 1.6 µF
 > - Clock Speed: 160 MHz on TIM1_CH1N (APB2)
 > - APB2 (Scale of 2x) → PCLK2 (80 MHz) → 160 MHz
 > - These values will be different if R7 and C9 are populated with (47 Ω | 100 nf, etc.)
 
-## Initial Calibration Row (10 kHz)
+---
+
+### Initial Calibration Row (10 kHz)
 
 | RPM Step (at Dyno) | ARR | Frequency | Output Ripple (After 2x @ DYNO) |
 |--------------------|-----|-----------|--------------------------|
 | 0.625 rpm | 15999 | 10.000 kHz | 156.080 mV |
 
-## Main Table (0.2 rpm Resolution)
+---
+
+### Main Table (0.2 rpm Resolution)
 
 | RPM Step (at Dyno) | ARR | Frequency | Output Ripple (After 2x @ DYNO) |
 |--------------------|-----|-----------|--------------------------|
@@ -68,3 +73,5 @@
 | 9.600 rpm | 207 | 769.231 kHz | 2.031 mV |
 | 9.800 rpm | 203 | 784.314 kHz | 1.992 mV |
 | 10.000 rpm | 199 | 800.000 kHz | 1.953 mV |
+
+---

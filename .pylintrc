@@ -1,3 +1,5 @@
+# .pylintrc
+
 [MESSAGES CONTROL]
 disable = W0621, W0105, C0103
 

@@ -1,3 +1,6 @@
+#.gitignore
+
+# File Extensions
 *.raw
 *.log
 *.htm
