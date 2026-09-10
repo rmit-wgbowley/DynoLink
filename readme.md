@@ -2,6 +2,19 @@
 Colors:
 FFFFFF - Pure white
 e01e37 - Bold crimson-red 
+
+Hi,
+This was my first project on the race team,
+so I'm not sure if it's yours — but if it is:
+
+Just take it seriously and you'll be fine. If
+you don't want to do the work, just tell someone.
+We're all here to have fun, not to make it feel
+like a job.
+
+— William Bowley
+
+P.S: Thanks for inspecting the `.md` or downloading the DynoLink repository `▽`ʃ♡
 -->
 
 
@@ -35,7 +48,8 @@ This allows a lookup table to be used to ramp up the dyno motor (a former elevat
 ```
 - [x] Safely interface a 3.3 V STM32 PWM output with a 0–10 V dyno controller input.
 - [x] Provide galvanic isolation between the ECU and dyno controller.
-- [/] Maintain signal integrity over 2–4 m cable runs.
+- [ ] Validate the signal is passed from the ECU to the dyno controller.
+- [ ] Maintain signal integrity over a ~6 m cable run while the dyno is operating.
 ```
 
 > *(Note). `[ ]` Not started. `[/]` In progress. `[x]` Complete.*
@@ -61,7 +75,7 @@ And then it would simply be transformed into a simple lookup table, assuming `C`
 <br>
 
 The dyno has a `200 kΩ` input impedance (AI1), an analog range of `0–10 V` with a linear factor of `5 mV/RPM`, and a maximum safe RPM of `1800` at the dyno-side motor. 
-The r26 powertrain has a gearing of `1:12.81`. Driving frequency table (ARR), output ripple at the dyno, and duty-cycle resolution trade-offs can be found [here](./domain/readme.md).
+The r26 powertrain has a gearing of `1:12.81`. Driving frequency table (ARR), output ripple at the dyno, and duty-cycle resolution trade-offs can be found [`here`](./domain/readme.md).
 
 | Step | Time (s) | ECU Duty Cycle (%) | Dyno Controller Input (V) | Target Dyno (RPM) | Target Load (RPM) |
 | :--- | :---: | :---: | :---: | :---: | :---: |
@@ -75,7 +89,7 @@ The r26 powertrain has a gearing of `1:12.81`. Driving frequency table (ARR), ou
 
 *Figure 1: Example profile parameters configured for a real-time `1.5-second` window with time steps of `250 ms` using `A = 1000`, `B = 12.81`, and `c = 0.005`.*
 
-> The program used to generate that table can be found [here](./domain/example_profiles.py)
+> The program used to generate that table can be found [`here`](./domain/example_profiles.py)
 
 However, for the real system, race day data is used to model the dynamic torque loading on the load motor.
 
@@ -137,7 +151,7 @@ DYNO Controller (Analog 10V Input)
   <em>Housing design (identical for both ECU-side and Dyno-side boards)</em>
 </p>
 
-Case design files: [Available here (Fusion source files)](domain/03_cad/)
+Case design files: [`Available here (Fusion source files)`](domain/03_cad/)
 
 ```
 - Same case size and external design for both boards — only internal PCBs differ
@@ -151,7 +165,7 @@ Case design files: [Available here (Fusion source files)](domain/03_cad/)
 ### Documentation
 
 Design notes, validation results, design iterations, and implementation 
-decisions are documented in the repository [issues](https://github.com/rmit-wgbowley/dyno-boards/issues).
+decisions are documented in the repository [`issues`](https://github.com/rmit-wgbowley/dyno-boards/issues).
 
 #### Tags
 
