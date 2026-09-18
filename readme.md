@@ -34,10 +34,6 @@ P.S: Thanks for inspecting the `.md` or downloading the DynoLink repository `▽
 
 ### Overview
 
-![MIT License](https://img.shields.io/badge/License-MIT-FFFFFF?style=flat-square&logoColor=black)
-![Electrics](https://img.shields.io/badge/Domain-Electrics-e01e37?style=flat-square&logoColor=black)
-![Dyno System](https://img.shields.io/badge/System-Dyno-FFFFFF?style=flat-square&logo=speedtest)
-
 The RMIT dyno setup consists of two systems: the dyno controller panel (DCS800) and the r19e ECU. This allows the vehicle's powertrain system to be validated before implementation. 
 The ECU controls the load motor and HV system. 
 However, for this test setup, it is also meant to transmit a `0-3.3 V` PWM signal to control the dyno motor RPM. 
